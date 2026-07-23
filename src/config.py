@@ -12,6 +12,8 @@ PROCESSED_DATA_PATH = DATA_DIR / "processed" / "cleaned_churn_data.csv"
 # 3. Define where our models and reports will live
 SAVED_MODELS_DIR = PROJECT_ROOT / "saved_models"
 REPORTS_DIR = PROJECT_ROOT / "reports"
+FIGURES_DIR = REPORTS_DIR / "figures"
+METRICS_DIR = REPORTS_DIR / "metrics"
 
 def initialize_directories():
     """
