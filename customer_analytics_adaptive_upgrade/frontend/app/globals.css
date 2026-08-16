@@ -1,0 +1,277 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  /* Core Colors */
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+
+  --color-destructive: var(--destructive);
+
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  /* Sidebar */
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+
+  /* Charts */
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+
+  /* Radius */
+  --radius-sm: calc(var(--radius) - 8px);
+  --radius-md: calc(var(--radius) - 4px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+  --radius-3xl: calc(var(--radius) + 12px);
+}
+
+/* =======================================================
+   LIGHT THEME
+======================================================= */
+
+:root {
+  color-scheme: light;
+
+  /* Base */
+  --background: #f9fcff;
+  --foreground: #374151;
+
+  /* Surface */
+  --card: #ffffff;
+  --card-foreground: #374151;
+
+  --popover: #ffffff;
+  --popover-foreground: #374151;
+
+  /* Primary - Pastel Pink */
+  --primary: #ff6fa5;
+  --primary-foreground: #ffffff;
+
+  /* Secondary - Warm Cream */
+  --secondary: #fdf2d4;
+  --secondary-foreground: #5b5140;
+
+  /* Muted */
+  --muted: #f7fbff;
+  --muted-foreground: #7b8797;
+
+  /* Accent - Soft Aqua */
+  --accent: #e8fcff;
+  --accent-foreground: #00a5bb;
+
+  /* Status */
+  --destructive: #ff8ca1;
+
+  /* Borders */
+  --border: #edf4f7;
+  --input: #edf4f7;
+  --ring: #00c2d3;
+
+  /* Radius */
+  --radius: 1rem;
+
+  /* Sidebar */
+  --sidebar: #ffffff;
+  --sidebar-foreground: #445064;
+
+  --sidebar-primary: #ff6fa5;
+  --sidebar-primary-foreground: #ffffff;
+
+  --sidebar-accent: #fff3f7;
+  --sidebar-accent-foreground: #ff4f90;
+
+  --sidebar-border: #edf4f7;
+  --sidebar-ring: #00c2d3;
+
+  /* Charts */
+  --chart-1: #ff6fa5;
+  --chart-2: #ffd56f;
+  --chart-3: #79e7f0;
+  --chart-4: #00c2d3;
+  --chart-5: #b794ff;
+}
+
+/* =======================================================
+   DARK THEME
+======================================================= */
+
+.dark {
+  color-scheme: dark;
+
+  /* Base */
+  --background: #1b2333;
+  --foreground: #eef4ff;
+
+  /* Surface */
+  --card: #232d40;
+  --card-foreground: #eef4ff;
+
+  --popover: #232d40;
+  --popover-foreground: #eef4ff;
+
+  /* Primary */
+  --primary: #ff8ab8;
+  --primary-foreground: #1b2333;
+
+  /* Secondary */
+  --secondary: #3b372c;
+  --secondary-foreground: #ffe8b3;
+
+  /* Muted */
+  --muted: #2b3448;
+  --muted-foreground: #b9c4d6;
+
+  /* Accent */
+  --accent: #234d56;
+  --accent-foreground: #9ff6ff;
+
+  /* Status */
+  --destructive: #ff95ab;
+
+  /* Borders */
+  --border: #313b50;
+  --input: #313b50;
+  --ring: #63e6ef;
+
+  /* Sidebar */
+  --sidebar: #20283b;
+  --sidebar-foreground: #eef4ff;
+
+  --sidebar-primary: #ff8ab8;
+  --sidebar-primary-foreground: #1b2333;
+
+  --sidebar-accent: #2b3448;
+  --sidebar-accent-foreground: #9ff6ff;
+
+  --sidebar-border: #313b50;
+  --sidebar-ring: #63e6ef;
+
+  /* Charts */
+  --chart-1: #ff8ab8;
+  --chart-2: #ffd56f;
+  --chart-3: #79e7f0;
+  --chart-4: #00c2d3;
+  --chart-5: #b794ff;
+}
+
+/* =======================================================
+   BASE STYLES
+======================================================= */
+
+@layer base {
+  *,
+  *::before,
+  *::after {
+    @apply border-border;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased transition-colors duration-300;
+    font-feature-settings: "rlig" 1, "calt" 1;
+    text-rendering: optimizeLegibility;
+  }
+
+  ::selection {
+    background: rgb(99 102 241 / 20%);
+    color: inherit;
+  }
+
+  *:focus-visible {
+    @apply outline-none ring-2 ring-ring ring-offset-2 ring-offset-background;
+  }
+
+  input,
+  textarea,
+  select {
+    @apply bg-background;
+  }
+
+  button {
+    cursor: pointer;
+  }
+}
+
+/* =======================================================
+   SCROLLBAR
+======================================================= */
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #d4d4d8;
+  border-radius: 999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #a1a1aa;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: #3f3f46;
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: #52525b;
+}
+
+/* Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #a1a1aa transparent;
+}
+
+.dark * {
+  scrollbar-color: #52525b transparent;
+}
+
+/* =======================================================
+   HIDE NEXT.JS DEV INDICATOR
+======================================================= */
+nextjs-portal {
+  display: none !important;
+}
