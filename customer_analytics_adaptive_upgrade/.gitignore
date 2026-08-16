@@ -1,0 +1,21 @@
+# Python Cache
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+
+# Environments
+.venv/
+env/
+venv/
+
+# Datasets (Never commit data)
+data/raw/*
+data/processed/*
+!data/.gitkeep
+
+# Models (Never commit binaries)
+saved_models/*
+!saved_models/.gitkeep
+
+# VS Code settings
+.vscode/

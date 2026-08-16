@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <linearGradient id="churnGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ff6fa5"/>
+      <stop offset="100%" stop-color="#b794ff"/>
+    </linearGradient>
+  </defs>
+  <!-- Background rounded tile matching your dark dashboard theme -->
+  <rect width="64" height="64" rx="16" fill="#1b2333"/>
+  <!-- AI Spark / Data Intelligence Node Symbol -->
+  <path d="M32 12 L38 26 L52 32 L38 38 L32 52 L26 38 L12 32 L26 26 Z" fill="url(#churnGrad)"/>
+  <circle cx="32" cy="32" r="6" fill="#ffffff"/>
+</svg>
