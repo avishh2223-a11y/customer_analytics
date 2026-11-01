@@ -33,9 +33,9 @@ export const adaptiveApi = {
     return apiClient.post<Dataset>(`${base}/${projectId}/datasets`, form, { headers: { 'Content-Type': 'multipart/form-data' } })
   },
   getDataset: (projectId: string, datasetId: string) => apiClient.get<Dataset>(`${base}/${projectId}/datasets/${datasetId}`),
-  confirmTarget: (projectId: string, datasetId: string, targetColumn: string) => apiClient.post<Dataset>(`${base}/${projectId}/datasets/${datasetId}/target`, { targetColumn }),
+  confirmTarget: (projectId: string, datasetId: string, target: string) => apiClient.post<Dataset>(`${base}/${projectId}/datasets/${datasetId}/confirm-target`, { target }),
   train: (projectId: string, datasetId: string) => apiClient.post<ModelRun>(`${base}/${projectId}/datasets/${datasetId}/train`),
-  customers: (projectId: string, datasetId: string, search = '') => apiClient.get<{ identifierColumn: string | null; customers: Array<{ customerKey: string; record: Record<string, unknown> }> }>(`${base}/${projectId}/datasets/${datasetId}/customers`, { params: { search } }),
+  customers: (projectId: string, datasetId: string, search = '') => apiClient.get<{ identifierColumn: string | null; customers: Array<{ customerKey: string; record: Record<string, unknown> }> }>(`${base}/${projectId}/datasets/${datasetId}/customers`, { params: { q: search } }),
   predict: (projectId: string, datasetId: string, customerKey: string) => apiClient.post<{ probability?: number; threshold?: number; predictedClass?: string; risk?: string; customerKey: string; record: Record<string, unknown> }>(`${base}/${projectId}/datasets/${datasetId}/predict`, { customerKey }),
   explainLocal: (projectId: string, datasetId: string, customerKey: string) => apiClient.post<{ contributions: Array<{ feature: string; shapValue: number }>; statement: string }>(`${base}/${projectId}/datasets/${datasetId}/explain/local`, { customerKey }),
   explainGlobal: (projectId: string, datasetId: string) => apiClient.get<{ features: Array<{ feature: string; meanAbsoluteShap: number }> }>(`${base}/${projectId}/datasets/${datasetId}/explain/global`),

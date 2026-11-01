@@ -58,6 +58,10 @@ class ConfirmTargetRequest(BaseModel):
     target: str = Field(..., min_length=1)
 
 
+class LegacyConfirmTargetRequest(BaseModel):
+    targetColumn: str = Field(..., min_length=1)
+
+
 class PredictRequest(BaseModel):
     customerKey: str = Field(..., min_length=1)
     modelId: str | None = None
@@ -186,6 +190,19 @@ def confirm_target(
         raise HTTPException(status_code=400, detail=str(exc)) from exc
 
 
+@app.post("/api/adaptive/projects/{project_id}/datasets/{dataset_id}/target")
+def confirm_target_legacy(
+    project_id: str,
+    dataset_id: str,
+    body: LegacyConfirmTargetRequest,
+):
+    """Compatibility route for older frontend clients and tests."""
+    try:
+        return platform.confirm_target(project_id, dataset_id, body.targetColumn)
+    except AdaptiveError as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
+
+
 @app.post("/api/adaptive/projects/{project_id}/datasets/{dataset_id}/train")
 def train_model(project_id: str, dataset_id: str):
     try:
@@ -264,6 +281,54 @@ def explain_record(
         raise HTTPException(status_code=400, detail=str(exc)) from exc
 
 
+@app.post(
+    "/api/adaptive/projects/{project_id}/datasets/{dataset_id}/explain/local"
+)
+def explain_local_record(
+    project_id: str,
+    dataset_id: str,
+    body: ExplainRequest,
+):
+    try:
+        if not body.customerKey:
+            raise HTTPException(
+                status_code=422,
+                detail="customerKey is required for a local explanation.",
+            )
+        return platform.explain(
+            project_id,
+            dataset_id,
+            body.customerKey,
+            body.modelId,
+        )
+    except AdaptiveError as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
+
+
+@app.get(
+    "/api/adaptive/projects/{project_id}/datasets/{dataset_id}/explain/global"
+)
+def explain_global_record(
+    project_id: str,
+    dataset_id: str,
+    model_id: str | None = None,
+):
+    try:
+        return platform.explain(project_id, dataset_id, None, model_id)
+    except AdaptiveError as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
+
+
+@app.get(
+    "/api/adaptive/projects/{project_id}/datasets/{dataset_id}/explanations"
+)
+def list_explanations(project_id: str, dataset_id: str):
+    try:
+        return platform.list_records(project_id, "explanations", dataset_id)
+    except AdaptiveError as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
+
+
 @app.post("/api/adaptive/projects/{project_id}/datasets/{dataset_id}/recommend")
 def recommend_record(
     project_id: str,
@@ -281,17 +346,27 @@ def recommend_record(
         raise HTTPException(status_code=400, detail=str(exc)) from exc
 
 
+@app.get(
+    "/api/adaptive/projects/{project_id}/datasets/{dataset_id}/recommendations"
+)
+def list_recommendations(project_id: str, dataset_id: str):
+    try:
+        return platform.list_records(project_id, "recommendations", dataset_id)
+    except AdaptiveError as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
+
+
 @app.post("/api/adaptive/projects/{project_id}/datasets/{dataset_id}/audit")
 def audit_model(
     project_id: str,
     dataset_id: str,
-    body: AuditRequest,
+    body: AuditRequest | None = None,
 ):
     try:
         return platform.audit(
             project_id,
             dataset_id,
-            body.modelId,
+            body.modelId if body else None,
         )
     except AdaptiveError as exc:
         raise HTTPException(status_code=400, detail=str(exc)) from exc
