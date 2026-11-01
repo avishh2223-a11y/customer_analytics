@@ -37,9 +37,7 @@ export default function DashboardPage() {
       if (firstDataset) {
         const ds = await adaptiveApi.getDataset(projectId, firstDataset.id)
         setDataset(ds)
-        if (ds?.activeModel) {
-          setActiveModel(ds.activeModel)
-        }
+        setActiveModel(ds?.activeModel ?? null)
       } else {
         setDataset(null)
         setActiveModel(null)
@@ -110,7 +108,7 @@ export default function DashboardPage() {
             <div>
               <p className="text-xs font-medium uppercase text-slate-500">Dataset Rows</p>
               <p className="text-2xl font-bold text-slate-900">
-                {dataset?.rowCount ?? 'Ready'}
+                {dataset ? dataset.rowCount.toLocaleString() : '—'}
               </p>
             </div>
           </CardContent>
@@ -124,7 +122,7 @@ export default function DashboardPage() {
             <div>
               <p className="text-xs font-medium uppercase text-slate-500">Target Column</p>
               <p className="text-xl font-bold text-slate-900">
-                {dataset?.target ?? 'Churn'}
+                {dataset?.target ?? 'Not confirmed'}
               </p>
             </div>
           </CardContent>
@@ -138,7 +136,7 @@ export default function DashboardPage() {
             <div>
               <p className="text-xs font-medium uppercase text-slate-500">Problem Type</p>
               <p className="text-sm font-bold text-slate-900 mt-1 capitalize">
-                {dataset?.problemType ? dataset.problemType.replace('_', ' ') : 'Classification'}
+                {dataset?.problemType ? dataset.problemType.replace('_', ' ') : 'Not trained'}
               </p>
             </div>
           </CardContent>

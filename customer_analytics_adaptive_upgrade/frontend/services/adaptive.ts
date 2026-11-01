@@ -20,6 +20,16 @@ export type Dataset = {
 }
 export type Project = { id: string; name: string; description: string; createdAt: string; updatedAt: string; datasetCount: number; datasets?: Dataset[] }
 export type ModelRun = { id: string; algorithm: string; problemType: string; productionThreshold: number | null; metrics: Record<string, number> }
+export type RiskSummary = {
+  totalCustomers: number
+  atRiskCount: number
+  safeCount: number
+  riskPercentage: number
+  threshold: number
+  revenueAtRisk: number | null
+  revenueColumn: string | null
+  generatedAt: string
+}
 
 const base = '/adaptive/projects'
 
@@ -44,4 +54,6 @@ export const adaptiveApi = {
   listRecommendations: (projectId: string, datasetId: string) => apiClient.get<Array<{ customerKey: string; recommendation: { ruleKey: string; recommendationText: string; reason: string }; generatedAt: string }>>(`${base}/${projectId}/datasets/${datasetId}/recommendations`),
   audit: (projectId: string, datasetId: string) => apiClient.post<{ status: string; checks: Array<{ key: string; status: string; detail: string }> }>(`${base}/${projectId}/datasets/${datasetId}/audit`),
   getLatestDataset: (projectId: string) => apiClient.get<Dataset>(`${base}/${projectId}/latest-dataset`),
+  riskSummary: (projectId: string, datasetId: string, refresh = false) =>
+    apiClient.get<RiskSummary>(`${base}/${projectId}/datasets/${datasetId}/risk-summary`, { params: { refresh } }),
 }
