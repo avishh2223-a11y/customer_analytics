@@ -32,8 +32,11 @@ class AdaptiveApiTests(unittest.TestCase):
         self.assertEqual(uploaded.status_code, 200)
         dataset_id = uploaded.json()["id"]
 
-        confirmed = self.client.post(f"/api/adaptive/projects/{project_id}/datasets/{dataset_id}/target", json={"targetColumn": "outcome"})
-        self.assertEqual(confirmed.status_code, 200)
+       confirmed = self.client.post(
+    f"/api/adaptive/projects/{project_id}/datasets/{dataset_id}/confirm-target",
+    json={"target": "outcome"},
+)
+
         trained = self.client.post(f"/api/adaptive/projects/{project_id}/datasets/{dataset_id}/train")
         self.assertEqual(trained.status_code, 200)
 

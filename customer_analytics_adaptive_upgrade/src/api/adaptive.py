@@ -99,3 +99,10 @@ def list_recommendations(project_id: str, dataset_id: str):
 @router.post("/projects/{project_id}/datasets/{dataset_id}/audit")
 def audit(project_id: str, dataset_id: str, model_id: str | None = None):
     return operation(lambda: platform.audit(project_id, dataset_id, model_id))
+
+@router.get("/projects/{project_id}/latest-dataset")
+def get_latest_dataset(project_id: str):
+    data = platform.get_latest_dataset(project_id)
+    if not data:
+        raise HTTPException(status_code=404, detail="No dataset found for this project.")
+    return data

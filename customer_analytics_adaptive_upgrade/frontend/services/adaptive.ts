@@ -2,14 +2,30 @@ import { apiClient } from '@/services/api'
 
 export type TargetCandidate = { column: string; confidence: number; kind: string; values: string[]; reason: string }
 export type ColumnProfile = { name: string; inferredType: string; semanticRoles: string[]; missingCount: number; missingRate: number; uniqueCount: number; sampleValues: string[]; warnings: string[] }
-export type Dataset = { id: string; projectId: string; originalName: string; rowCount: number; columnCount: number; profile: { columns: ColumnProfile[]; identifierCandidates: Array<{ column: string; confidence: number; reason: string }>; targetCandidates: TargetCandidate[]; duplicateRows: number }; target: string | null; problemType: string }
-export type Project = { id: string; name: string; description: string; createdAt: string; updatedAt: string; datasetCount: number }
+export type Dataset = { 
+  id: string; 
+  projectId: string; 
+  originalName: string; 
+  rowCount: number; 
+  columnCount: number; 
+  profile: { 
+    columns: ColumnProfile[]; 
+    identifierCandidates: Array<{ column: string; confidence: number; reason: string }>; 
+    targetCandidates: TargetCandidate[]; 
+    duplicateRows: number 
+  }; 
+  target: string | null; 
+  problemType: string;
+  activeModel?: ModelRun;
+}
+export type Project = { id: string; name: string; description: string; createdAt: string; updatedAt: string; datasetCount: number; datasets?: Dataset[] }
 export type ModelRun = { id: string; algorithm: string; problemType: string; productionThreshold: number | null; metrics: Record<string, number> }
 
 const base = '/adaptive/projects'
 
 export const adaptiveApi = {
   listProjects: () => apiClient.get<Project[]>(base),
+  getProject: (projectId: string) => apiClient.get<Project>(`${base}/${projectId}`),
   createProject: (name: string, description?: string) => apiClient.post<Project>(base, { name, description }),
   uploadDataset: (projectId: string, file: File) => {
     const form = new FormData()
@@ -27,4 +43,5 @@ export const adaptiveApi = {
   recommend: (projectId: string, datasetId: string, customerKey: string) => apiClient.post<{ prediction: { probability: number; threshold: number }; recommendation: { ruleKey: string; recommendationText: string; reason: string; drivers: string[] } }>(`${base}/${projectId}/datasets/${datasetId}/recommend`, { customerKey }),
   listRecommendations: (projectId: string, datasetId: string) => apiClient.get<Array<{ customerKey: string; recommendation: { ruleKey: string; recommendationText: string; reason: string }; generatedAt: string }>>(`${base}/${projectId}/datasets/${datasetId}/recommendations`),
   audit: (projectId: string, datasetId: string) => apiClient.post<{ status: string; checks: Array<{ key: string; status: string; detail: string }> }>(`${base}/${projectId}/datasets/${datasetId}/audit`),
+  getLatestDataset: (projectId: string) => apiClient.get<Dataset>(`${base}/${projectId}/latest-dataset`),
 }
